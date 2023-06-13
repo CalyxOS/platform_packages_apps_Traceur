@@ -118,11 +118,8 @@ public class TraceService extends IntentService {
             EventLog.writeEvent(0x534e4554, "204992293", -1, "");
             return;
         }
-        UserManager userManager = context.getSystemService(UserManager.class);
-        boolean isAdminUser = userManager.isAdminUser();
-        boolean debuggingDisallowed = userManager.hasUserRestriction(
-                UserManager.DISALLOW_DEBUGGING_FEATURES);
-        if (!isAdminUser || debuggingDisallowed) {
+        boolean isAdminUser = context.getSystemService(UserManager.class).isAdminUser();
+        if (!isAdminUser) {
             return;
         }
 

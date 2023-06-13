@@ -76,14 +76,11 @@ public class StorageProvider extends FileSystemProvider{
         boolean developerOptionsIsEnabled =
             Settings.Global.getInt(getContext().getContentResolver(),
                 Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) != 0;
-        UserManager userManager = getContext().getSystemService(UserManager.class);
-        boolean isAdminUser = userManager.isAdminUser();
-        boolean debuggingDisallowed = userManager.hasUserRestriction(
-                UserManager.DISALLOW_DEBUGGING_FEATURES);
+        boolean isAdminUser = getContext().getSystemService(UserManager.class).isAdminUser();
 
         // If developer options is not enabled or the user is not an admin, return an empty root
         // cursor. This removes the provider from the list entirely.
-        if (!developerOptionsIsEnabled || !isAdminUser || debuggingDisallowed) {
+        if (!developerOptionsIsEnabled || !isAdminUser) {
             return null;
         }
 

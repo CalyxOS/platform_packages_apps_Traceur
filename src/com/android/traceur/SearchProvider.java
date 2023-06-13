@@ -69,14 +69,11 @@ public class SearchProvider extends SearchIndexablesProvider {
         boolean developerOptionsIsEnabled =
             Settings.Global.getInt(getContext().getContentResolver(),
                 Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) != 0;
-        UserManager userManager = getContext().getSystemService(UserManager.class);
-        boolean isAdminUser = userManager.isAdminUser();
-        boolean debuggingDisallowed = userManager.hasUserRestriction(
-                UserManager.DISALLOW_DEBUGGING_FEATURES);
+        boolean isAdminUser = getContext().getSystemService(UserManager.class).isAdminUser();
 
         // System Tracing shouldn't be searchable if developer options are not enabled or if the
         // user is not an admin.
-        if (!developerOptionsIsEnabled || !isAdminUser || debuggingDisallowed) {
+        if (!developerOptionsIsEnabled || !isAdminUser) {
             MatrixCursor cursor = new MatrixCursor(NON_INDEXABLES_KEYS_COLUMNS);
             Object[] row = new Object[] {getContext().getString(R.string.system_tracing)};
             cursor.addRow(row);

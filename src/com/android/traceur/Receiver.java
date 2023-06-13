@@ -90,12 +90,8 @@ public class Receiver extends BroadcastReceiver {
             boolean developerOptionsEnabled = (1 ==
                 Settings.Global.getInt(context.getContentResolver(),
                     Settings.Global.DEVELOPMENT_SETTINGS_ENABLED , 0));
-            UserManager userManager = context.getSystemService(UserManager.class);
-            boolean isAdminUser = userManager.isAdminUser();
-            boolean debuggingDisallowed = userManager.hasUserRestriction(
-                    UserManager.DISALLOW_DEBUGGING_FEATURES);
-            updateStorageProvider(context,
-                    developerOptionsEnabled && isAdminUser && !debuggingDisallowed);
+            boolean isAdminUser = context.getSystemService(UserManager.class).isAdminUser();
+            updateStorageProvider(context, developerOptionsEnabled && isAdminUser);
         } else if (STOP_ACTION.equals(intent.getAction())) {
             prefs.edit().putBoolean(
                     context.getString(R.string.pref_key_tracing_on), false).commit();
@@ -224,12 +220,9 @@ public class Receiver extends BroadcastReceiver {
                         boolean developerOptionsEnabled = (1 ==
                             Settings.Global.getInt(context.getContentResolver(),
                                 Settings.Global.DEVELOPMENT_SETTINGS_ENABLED , 0));
-                        UserManager userManager = context.getSystemService(UserManager.class);
-                        boolean isAdminUser = userManager.isAdminUser();
-                        boolean debuggingDisallowed = userManager.hasUserRestriction(
-                                UserManager.DISALLOW_DEBUGGING_FEATURES);
-                        updateStorageProvider(context,
-                                developerOptionsEnabled && isAdminUser && !debuggingDisallowed);
+                        boolean isAdminUser = context.getSystemService(UserManager.class)
+                                .isAdminUser();
+                        updateStorageProvider(context, developerOptionsEnabled && isAdminUser);
 
                         if (!developerOptionsEnabled) {
                             SharedPreferences prefs =
