@@ -58,14 +58,14 @@ public class Receiver extends BroadcastReceiver {
     private static final List<String> TRACE_TAGS = Arrays.asList(
             "aidl", "am", "binder_driver", "camera", "dalvik", "disk", "freq",
             "gfx", "hal", "idle", "input", "memory", "memreclaim", "network", "power",
-            "res", "sched", "sync", "thermal", "view", "webview", "wm", "workq");
+            "res", "sched", "ss", "sync", "thermal", "view", "webview", "wm", "workq");
 
     /* The user list doesn't include workq or sync, because the user builds don't have
      * permissions for them. */
     private static final List<String> TRACE_TAGS_USER = Arrays.asList(
             "aidl", "am", "binder_driver", "camera", "dalvik", "disk", "freq",
             "gfx", "hal", "idle", "input", "memory", "memreclaim", "network", "power",
-            "res", "sched", "thermal", "view", "webview", "wm");
+            "res", "sched", "ss", "thermal", "view", "webview", "wm");
 
     private static final String TAG = "Traceur";
 
@@ -171,6 +171,9 @@ public class Receiver extends BroadcastReceiver {
                     prefs.getString(context.getString(R.string.pref_key_buffer_size),
                         context.getString(R.string.default_buffer_size)));
 
+                boolean winscopeTracing = prefs.getBoolean(
+                    context.getString(R.string.pref_key_winscope),
+                        false);
                 boolean appTracing = prefs.getBoolean(context.getString(R.string.pref_key_apps), true);
                 boolean longTrace = prefs.getBoolean(context.getString(R.string.pref_key_long_traces), true);
 
@@ -182,7 +185,7 @@ public class Receiver extends BroadcastReceiver {
                     prefs.getString(context.getString(R.string.pref_key_max_long_trace_duration),
                         context.getString(R.string.default_long_trace_duration)));
 
-                TraceService.startTracing(context, activeAvailableTags, bufferSize,
+                TraceService.startTracing(context, activeAvailableTags, bufferSize, winscopeTracing,
                     appTracing, longTrace, maxLongTraceSize, maxLongTraceDuration);
             } else {
                 TraceService.stopTracing(context);
